@@ -1,12 +1,12 @@
 .vscode
 
 # build output
-frontend/dist/
-frontend/output/
+frontend-legacy/dist/
+frontend-legacy/output/
 
 # dependencies
 node_modules
-frontend/node_modules/
+frontend-legacy/node_modules/
 
 # logs
 npm-debug.log*
@@ -24,6 +24,9 @@ pnpm-debug.log*
 *.pem
 Thumbs.db
 .history
+
+frontend/cypress/videos/
+frontend/cypress/screenshots/
 
 backend/HELP.md
 backend/.gradle

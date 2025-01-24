@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "dev": "pnpm run --parallel /dev/",
-    "dev:frontend": "pnpm --filter frontend dev",
+    "dev:frontend": "pnpm --filter frontend-legacy dev",
     "dev:backend": "cd backend && ./gradlew bootRun",
     "build": "pnpm build:frontend && pnpm build:backend",
     "build:frontend": "pnpm -F @stog/frontend",
