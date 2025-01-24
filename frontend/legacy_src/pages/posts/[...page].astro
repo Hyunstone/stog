@@ -1,0 +1,59 @@
+---
+import type { FrontmatterPage } from 'astro-boilerplate-components'
+import { BlogGallery, NewerOlderPagination, PaginationHeader, Section } from 'astro-boilerplate-components'
+
+import Base from '../../templates/Base.astro'
+import { AppConfig } from '../../utils/AppConfig'
+import { sortByDate } from '../../utils/Posts'
+
+type GetStaticPaths = {
+	paginate: any
+} // Overrides `GetStaticPathsOptions` types from Astro
+
+export async function getStaticPaths({ paginate }: GetStaticPaths) {
+	const response = await fetch('http://localhost:8080/posts')
+	const data = await response.json()
+	const posts = data.map((post: any) => ({
+		frontmatter: {
+			title: post.title,
+			description: post.description,
+			pubDate: post.pubDate,
+			imgSrc: post.imgSrc,
+			imgAlt: post.imgAlt,
+			draft: post.draft,
+		},
+		url: `/posts/${post.id}`, // 게시물 URL 경로
+		rawContent: post.content || '', // 실제 콘텐츠 데이터는 비워둠
+		compiledContent: post.compiledContent || '', // 컴파일된 콘텐츠는 비워둠
+	}))
+	const sortedPosts = sortByDate(posts)
+
+	return paginate(sortedPosts, { pageSize: 9 })
+}
+
+interface Props {
+	page: FrontmatterPage
+}
+
+const { page } = Astro.props as Props
+const titleSuffix = ` - ${AppConfig.site_name}`
+const titleBase = `Blog page ${page.currentPage}`
+const title = titleBase + titleSuffix
+const description = 'stone`s development blog page.'
+
+console.log('Page Data:', page.data)
+---
+
+<Base head={{ title, description }}>
+	<Section>
+		<PaginationHeader title='Development Posts' description='posts of stone`s' />
+	</Section>
+
+	<Section>
+		<BlogGallery postList={page.data} />
+	</Section>
+
+	<Section>
+		<NewerOlderPagination page={page} />
+	</Section>
+</Base>
